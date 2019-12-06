@@ -1,10 +1,12 @@
 import bibtexparser
 
 def read_file(filename):
-    with open('test.bib') as bibtex_file:
-        bibtex_str = bibtex_file.read()
-    bib_database = bibtexparser.loads(bibtex_str)
+    with open('bibtex.bib') as bibtex_file:
+        bib_database = bibtexparser.load(bibtex_file)
     return bib_database.entries
+
+def year_filter(bib_database, year):
+    pass
 
 def parse_bib_database(bib_database):
     for entry in bib_database:
@@ -13,7 +15,7 @@ def parse_bib_database(bib_database):
     print(bib_database)
 
 def main():
-    bib_database = read_file('test.bib')
+    bib_database = read_file('bibtex.bib')
     parse_bib_database(bib_database)
 
 main()
