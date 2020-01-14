@@ -6,13 +6,29 @@ def read_file(filename):
     return bib_database.entries
 
 def year_filter(bib_database, year):
-    pass
+    new_bibs = []
+    for entry in bib_database:
+        if entry['year'] == year:
+            new_bibs.append(entry)
+
+def year_range_filter(bib_database, yr):
+    new_bibs = []
+    for entry in bib_database:
+        if entry['year'] >= yr[0] and entry['year'] <= yr[1]:
+            new_bibs.append(entry)
+
 
 def parse_bib_database(bib_database):
     for entry in bib_database:
+        entrytype = entry['ENTRYTYPE']
+        title = entry['title']
         authors = entry['author'].split(',')
-        entry['author'] = [val.strip() for val in set(authors)]
-    print(bib_database)
+        parse_author(authors)
+
+def parse_author(authors):
+        for author in authors:
+            author = bibtexparser.customization.splitname(author)
+            print(' '.join(author['last']) + ', ' + ' '.join(author['first']) + ' ' + ' '.join(author['von']) + ' ' + ' '.join(author['jr']))
 
 def main():
     bib_database = read_file('bibtex.bib')
