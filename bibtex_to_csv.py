@@ -17,7 +17,6 @@ def year_range_filter(bib_database, yr):
         if entry['year'] >= yr[0] and entry['year'] <= yr[1]:
             new_bibs.append(entry)
 
-
 def parse_bib_database(bib_database):
     for entry in bib_database:
         entrytype = entry['ENTRYTYPE']
@@ -28,7 +27,11 @@ def parse_bib_database(bib_database):
 def parse_author(authors):
         for author in authors:
             author = bibtexparser.customization.splitname(author)
-            print(' '.join(author['last']) + ', ' + ' '.join(author['first']) + ' ' + ' '.join(author['von']) + ' ' + ' '.join(author['jr']))
+            if not author['jr']:
+                author = ' '.join(author['von']) + ' ' + ' '.join(author['last']) + ', ' + ' '.join(author['first'])
+            else:
+                author = ' '.join(author['von']) + ' ' + ' '.join(author['last']) + ', ' + ' '.join(author['jr']) + ', ' + ' '.join(author['first'])
+            print(author.strip(' ,'))
 
 def main():
     bib_database = read_file('bibtex.bib')
