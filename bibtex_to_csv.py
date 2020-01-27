@@ -9,17 +9,22 @@ def read_file(filename):
 def year_filter(bib_database, year):
     new_bibs = []
     for entry in bib_database:
-        if entry['year'] == year:
-            new_bibs.append(entry)
+        if 'year' in entry.keys():
+            print(entry['year'])
+            if int(entry['year']) == year:
+                new_bibs.append(entry)
+    return new_bibs
 
-def year_range_filter(bib_database, yr):
+def year_range_filter(bib_database, year1, year2):
     new_bibs = []
     for entry in bib_database:
-        if entry['year'] >= yr[0] and entry['year'] <= yr[1]:
-            new_bibs.append(entry)
+        if 'year' in entry.keys():
+            if int(entry['year']) >= year1 and int(entry['year']) <= year2:
+                new_bibs.append(entry)
+    return new_bibs
 
 def parse_bib_database(bib_database):
-    db_list = [['Title', 'Name', 'Organization']]
+    db_list = [['Name', 'Title', 'Organization', 'Year of Publication']]
     for entry in bib_database:
         if not 'author' in entry.keys():
             entry['author'] = ''
@@ -34,16 +39,21 @@ def parse_bib_database(bib_database):
             organization = entry['institution'].replace('\\', '')
         if 'publisher' in entry.keys():
             organization = entry['publisher'].replace('\\', '')
+        if 'year' in entry.keys():
+            year = entry['year']
+        else:
+            year = ''
         
         for author in authors:
             author = author.strip()
             if author != 'others,':
                 single_entry = []
-                single_entry.append(entry['title'])
                 single_entry.append(author)
+                single_entry.append(entry['title'])
                 single_entry.append(organization)
+                single_entry.append(year)
                 db_list.append(single_entry)
-    return sorted(db_list)
+    return db_list
 
 def parse_author(authors):
     author_list = []
@@ -56,10 +66,18 @@ def parse_author(authors):
 
 def main():
     bib_database = read_file(input('Input filename: '))
+    year_input = input('Year Filter? "Y start, end" OR "Y year" ')
+
+    if year_input[0].upper() == 'Y' and len(year_input) == 6:
+        bib_database = year_filter(bib_database, int(year_input[-4:]))
+    if year_input[0].upper() == 'Y' and len(year_input) == 12:
+        bib_database = year_range_filter(bib_database, int(year_input[-10:-6]), int(year_input[-4:]))
+
     db_list = parse_bib_database(bib_database)
+    db_list[1:] = sorted(db_list[1:], key=lambda row: row[0].upper(), reverse=False)
 
     with open("output.csv", "w", newline="") as output:
         writer = csv.writer(output)
-        writer.writerows(sorted(db_list, key=lambda row: row[1].upper(), reverse=False))
+        writer.writerows(db_list)
 
 main()
