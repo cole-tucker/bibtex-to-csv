@@ -3,7 +3,7 @@ import csv
 
 def read_file(filename):
     with open(filename) as bibtex_file:
-        bib_database = bibtexparser.load(bibtex_file)
+        bib_database = bibtexparser.load(bibtex_file, parser=bibtexparser.bparser.BibTexParser(common_strings=True))
 
     return bib_database.entries
 
@@ -11,8 +11,7 @@ def year_filter(bib_database, year):
     new_bibs = []
     for entry in bib_database:
         if 'year' in entry.keys():
-            print(entry['year'])
-            if int(entry['year']) == year:
+            if entry['year'] == year:
                 new_bibs.append(entry)
 
     return new_bibs
