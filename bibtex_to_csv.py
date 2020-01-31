@@ -7,12 +7,30 @@ def read_file(filename):
 
     return bib_database.entries
 
+def handle_year(years):
+    year_mil_cen = years[0][:2]
+    year_start = int(years[0][-2:])
+    year_end = int(years[-1][-2:])
+
+    if int(year_start) > int(year_end):
+        last_cen_years = [year_mil_cen + str(i) for i in range(year_start, 100)]
+        this_cen_years = [str(int(year_mil_cen) + 1) + str(i) for i in range(0, year_end)]
+
+        return last_cen_years.append(this_cen_years)
+
+    return [year_mil_cen + str(i) for i in range(year_start, year_end + 1)]
+
 def year_filter(bib_database, year):
     new_bibs = []
     for entry in bib_database:
         if 'year' in entry.keys():
-            if entry['year'] == year:
-                new_bibs.append(entry)
+            year_split = entry['year'].split('--')
+            if len(year_split) > 1:
+                if str(year) in handle_year(year_split):
+                    new_bibs.append(entry)
+            else:
+                if str(year) == entry['year']:
+                    new_bibs.append(entry)
 
     return new_bibs
 
@@ -28,12 +46,6 @@ def year_range_filter(bib_database, year1, year2):
 def parse_bib_database(bib_database):
     db_list = [['Name', 'Title', 'Organization', 'Year of Publication']]
     for entry in bib_database:
-        if 'author' in entry.keys():
-            authors = entry['author'].split(' and ')
-            authors = parse_author(authors)
-        else:
-            entry['author'] = ''
-
         if 'organization' in entry.keys():
             organization = entry['organization'].replace('\\', '')
         if 'school' in entry.keys():
@@ -48,15 +60,27 @@ def parse_bib_database(bib_database):
         else:
             year = ''
         
-        for author in authors:
-            author = author.strip()
-            if author != 'others,':
-                single_entry = []
-                single_entry.append(author)
-                single_entry.append(entry['title'])
-                single_entry.append(organization)
-                single_entry.append(year)
-                db_list.append(single_entry)
+        if 'author' in entry.keys():
+            authors = entry['author'].split(' and ')
+            authors = parse_author(authors)
+            for author in authors:
+                author = author.strip()
+                if author != 'others,':
+                    single_entry = []
+                    single_entry.append(author)
+                    single_entry.append(entry['title'])
+                    single_entry.append(organization)
+                    single_entry.append(year)
+                    db_list.append(single_entry)
+
+        else:
+            authors = ''
+            single_entry = []
+            single_entry.append(authors)
+            single_entry.append(entry['title'])
+            single_entry.append(organization)
+            single_entry.append(year)
+            db_list.append(single_entry)
     return db_list
 
 def parse_author(authors):
@@ -69,8 +93,10 @@ def parse_author(authors):
     return author_list
 
 def main():
-    bib_database = read_file(input('Input filename: '))
-    year_input = input('Year Filter? "Y start, end" OR "Y year" ')
+    # bib_database = read_file(input('Input filename: '))
+    # year_input = input('Year Filter? "Y start, end" OR "Y year" ')
+    bib_database = read_file('test/test.bib')
+    year_input = 'y 1958'
 
     # Single year filter
     if year_input[0].upper() == 'Y' and len(year_input) == 6:
