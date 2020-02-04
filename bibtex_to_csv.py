@@ -34,8 +34,7 @@ def year_filter(bib_database, year):
 
     return new_bibs
 
-def year_range_filter(bib_database, year1, year2):
-    year_range = [i for i in range(year1, year2 + 1)]
+def year_range_filter(bib_database, year_range):
     new_bibs = []
     for entry in bib_database:
         if 'year' in entry.keys():
@@ -106,13 +105,17 @@ def main():
     # year_input = input('Year Filter? "Y start, end" OR "Y year" ')
     bib_database = read_file('test/test.bib')
     year_input = 'y 1954 1958'.split(' ')
+    if int(year_input[1]) < int(year_input[2]):
+        year_range = [i for i in range(int(year_input[1]), int(year_input[2]) + 1)]
+    else:
+        ...
 
     # Single year filter
     if year_input[0].upper() == 'Y' and len(year_input) == 2:
         bib_database = year_filter(bib_database, int(year_input[1]))
     # Year range filter
     if year_input[0].upper() == 'Y' and len(year_input) == 3:
-        bib_database = year_range_filter(bib_database, int(year_input[1]), int(year_input[2]))
+        bib_database = year_range_filter(bib_database, year_range)
 
     db_list = parse_bib_database(bib_database)
     # Sort on author
