@@ -1,0 +1,16 @@
+<!doctype html>
+<head>
+    <title>BibTeX Converter</title>
+</head>
+<body>
+    <h1>Upload BibTeX File</h1>
+    <form method=post enctype=multipart/form-data>
+        <input type=file name=file>
+        <p>Year Filter (YYYY/YYYY-YYYY)</p>
+        <input type=text name=year>
+        <input type=submit value=Upload>
+    </form>
+    {% if name %}
+        <h1><textarea name="output" id="output" cols="120" rows="20">Output for {{ name }}</textarea></h1>
+    {% endif %}
+</body>

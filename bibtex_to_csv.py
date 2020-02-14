@@ -140,18 +140,15 @@ def parse_author(authors):
     return author_list
 
 def main(filename, year_input):
-    # bib_database = read_file(input('Input filename: '))
-    # year_input = input('Year Filter? "Y start, end" OR "Y year" ')
     bib_database = read_file(filename)
     year_input = year_input.split('-')
-    # year_input = 'n'
 
     # Single year filter
     if len(year_input) == 1 and len(year_input[0]) == 4:
         bib_database = year_filter(bib_database, int(year_input[0]))
     # Year range filter
     if len(year_input) == 2:
-        if int(year_input[1]) < int(year_input[2]):
+        if int(year_input[0]) < int(year_input[1]):
             year_range = [i for i in range(int(year_input[0]), int(year_input[1]) + 1)]
         else:
             ...
