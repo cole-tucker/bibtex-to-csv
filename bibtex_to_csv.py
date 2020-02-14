@@ -4,7 +4,7 @@ import csv
 from flask import Flask, flash, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = '/Users/coletucker/dev/repos/bibtex-to-csv/'
+UPLOAD_FOLDER = '/path/to/repo/'
 ALLOWED_EXTENSIONS = {'bib'}
 
 app = Flask(__name__)
