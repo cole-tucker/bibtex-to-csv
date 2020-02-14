@@ -1,7 +1,7 @@
 import os
 import bibtexparser
 import csv
-from flask import Flask, flash, request, redirect, url_for
+from flask import Flask, flash, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = '/Users/coletucker/dev/repos/bibtex-to-csv/'
@@ -30,6 +30,7 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            print(request.form)
             if request.form['year'] != '':
                 year_input = request.form['year']
             else:
@@ -37,17 +38,7 @@ def upload_file():
             main(filename, year_input)
             return redirect(url_for('upload_file',
                                     filename=filename))
-    return '''
-    <!doctype html>
-    <title>BibTeX Converter</title>
-    <h1>Upload BibTeX File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <p>Year Filter (YYYY/YYYY-YYYY)</p>
-      <input type=text name=year>
-      <input type=submit value=Upload>
-    </form>
-    '''
+    return render_template('index.html')
 
 def read_file(filename):
     with open(filename) as bibtex_file:
@@ -152,11 +143,11 @@ def main(filename, year_input):
     # bib_database = read_file(input('Input filename: '))
     # year_input = input('Year Filter? "Y start, end" OR "Y year" ')
     bib_database = read_file(filename)
-    year_input = year_input.split(' ')
+    year_input = year_input.split('-')
     # year_input = 'n'
 
     # Single year filter
-    if len(year_input) == 1:
+    if len(year_input) == 1 and len(year_input[0]) == 4:
         bib_database = year_filter(bib_database, int(year_input[0]))
     # Year range filter
     if len(year_input) == 2:
@@ -174,4 +165,4 @@ def main(filename, year_input):
         writer = csv.writer(output)
         writer.writerows(db_list)
 
-main()
+# main()
