@@ -7,7 +7,8 @@ This program takes a BibTeX file and converts the name, title, organizational af
 3. You will need to setup Flask for this project. Goto the below link to install.
 `https://flask.palletsprojects.com/en/1.1.x/installation/#virtual-environments` and install the virtual environment.
 4. In the command line, run
-```pip install -r requirements.txt
+```
+pip install -r requirements.txt
 . [VENV_NAME]/bin/activate
 export FLASK_APP=bibtex_to_csv
 flask start
