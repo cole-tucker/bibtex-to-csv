@@ -4,7 +4,7 @@ import csv
 from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = '/Users/coletucker/Desktop'
+UPLOAD_FOLDER = '/Users/coletucker/dev/repos/bibtex-to-csv/'
 ALLOWED_EXTENSIONS = {'bib'}
 
 app = Flask(__name__)
@@ -30,14 +30,21 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            if request.form['year'] != '':
+                year_input = request.form['year']
+            else:
+                year_input = 'n'
+            main(filename, year_input)
             return redirect(url_for('upload_file',
                                     filename=filename))
     return '''
     <!doctype html>
     <title>BibTeX Converter</title>
-    <h1>Upload new File</h1>
+    <h1>Upload BibTeX File</h1>
     <form method=post enctype=multipart/form-data>
       <input type=file name=file>
+      <p>Year Filter (YYYY/YYYY-YYYY)</p>
+      <input type=text name=year>
       <input type=submit value=Upload>
     </form>
     '''
@@ -141,21 +148,22 @@ def parse_author(authors):
         
     return author_list
 
-def main():
+def main(filename, year_input):
     # bib_database = read_file(input('Input filename: '))
     # year_input = input('Year Filter? "Y start, end" OR "Y year" ')
-    bib_database = read_file('test/test.bib')
-    year_input = 'y 1954 1958'.split(' ')
-    if int(year_input[1]) < int(year_input[2]):
-        year_range = [i for i in range(int(year_input[1]), int(year_input[2]) + 1)]
-    else:
-        ...
+    bib_database = read_file(filename)
+    year_input = year_input.split(' ')
+    # year_input = 'n'
 
     # Single year filter
-    if year_input[0].upper() == 'Y' and len(year_input) == 2:
-        bib_database = year_filter(bib_database, int(year_input[1]))
+    if len(year_input) == 1:
+        bib_database = year_filter(bib_database, int(year_input[0]))
     # Year range filter
-    if year_input[0].upper() == 'Y' and len(year_input) == 3:
+    if len(year_input) == 2:
+        if int(year_input[1]) < int(year_input[2]):
+            year_range = [i for i in range(int(year_input[0]), int(year_input[1]) + 1)]
+        else:
+            ...
         bib_database = year_range_filter(bib_database, year_range)
 
     db_list = parse_bib_database(bib_database)
