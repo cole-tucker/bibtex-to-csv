@@ -1,16 +1,28 @@
 <!doctype html>
 <head>
     <title>BibTeX Converter</title>
+    <link rel="stylesheet" href="../styles/styles.css">
 </head>
 <body>
     <h1>Upload BibTeX File</h1>
     <form method=post enctype=multipart/form-data>
         <input type=file name=file>
-        <p>Year Filter (YYYY/YYYY-YYYY)</p>
-        <input type=text name=year>
+        <br>
+        <select name="year1" method="GET" action="/">
+            <option value="" selected></option>
+            {% for year in years %}
+              <option value="{{year}}">{{year}}</option>
+            {% endfor %}
+        </select>
+        <select name="year2" method="GET" action="/">
+            <option value="" selected></option>
+            {% for year in years[1:] %}
+              <option value="{{year}}">{{year}}</option>
+            {% endfor %}
+        </select>
         <input type=submit value=Upload>
     </form>
-    {% if name %}
-        <h1><textarea name="output" id="output" cols="120" rows="20">Output for {{ name }}</textarea></h1>
-    {% endif %}
+    <h1>Output</h1>
+    <textarea name="output" id="output" cols="120" rows="20">{{ output }}</textarea>
 </body>
+</html>

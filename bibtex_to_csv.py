@@ -1,6 +1,7 @@
 import os
 import bibtexparser
 import csv
+from datetime import date
 from flask import Flask, flash, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
 
@@ -30,15 +31,15 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            print(request.form)
-            if request.form['year'] != '':
-                year_input = request.form['year']
+            if request.form['year1'] != '' and request.form['year2'] != '':
+                year_input = request.form['year1'] + '-' + request.form['year2']
             else:
                 year_input = 'n'
             main(filename, year_input)
             return redirect(url_for('upload_file',
                                     filename=filename))
-    return render_template('index.html')
+    years = [n for n in range(date.today().year - 100, date.today().year)]
+    return render_template('index.html', years=years)
 
 def read_file(filename):
     with open(filename) as bibtex_file:
@@ -162,4 +163,6 @@ def main(filename, year_input):
         writer = csv.writer(output)
         writer.writerows(db_list)
 
+if __name__ == '__main__':
+    app.run()
 # main()
