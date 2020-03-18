@@ -1,28 +1,35 @@
 <!doctype html>
 <head>
     <title>BibTeX Converter</title>
-    <link rel="stylesheet" href="../styles/styles.css">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </head>
 <body>
+    <div class="header">
+        <h2>The University of Arizona</h2>
+    </div>
     <h1>Upload BibTeX File</h1>
     <form method=post enctype=multipart/form-data>
         <input type=file name=file>
         <br>
-        <select name="year1" method="GET" action="/">
+        <p>Year Filter</p>
+        <select name="year1" method="GET" action="/" onchange="setYear(this.value)">
             <option value="" selected></option>
             {% for year in years %}
               <option value="{{year}}">{{year}}</option>
             {% endfor %}
         </select>
-        <select name="year2" method="GET" action="/">
+        <select name="year2" method="GET" action="/" id="select2">
             <option value="" selected></option>
-            {% for year in years[1:] %}
+            <!-- {% for year in years[1:] %}
               <option value="{{year}}">{{year}}</option>
-            {% endfor %}
+            {% endfor %} -->
         </select>
         <input type=submit value=Upload>
     </form>
-    <h1>Output</h1>
-    <textarea name="output" id="output" cols="120" rows="20">{{ output }}</textarea>
+    <form method="GET">
+        <h1>Output</h1>
+        <textarea name="output" id="output" cols="120" rows="20">{{ output }}</textarea>
+    </form>
 </body>
 </html>

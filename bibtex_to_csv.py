@@ -38,7 +38,9 @@ def upload_file():
             main(filename, year_input)
             return redirect(url_for('upload_file',
                                     filename=filename))
-    years = [n for n in range(date.today().year - 100, date.today().year)]
+    # if request.method == 'GET':
+    #     return 
+    years = [n for n in range(date.today().year - 100, date.today().year + 1)]
     return render_template('index.html', years=years)
 
 def read_file(filename):
