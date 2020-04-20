@@ -1,129 +1,90 @@
-html, body {
-    margin: 0 !important;
-    padding: 0 !important;
+html,
+body {
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 body {
-    font-family: MiloWeb,Verdana,Geneva,sans-serif;
-}
-
-header {
-    background-color: #8b0015;
-    color: white;
-    float: left;
-    width: 100%;
-    padding: 0;
-    margin-bottom: 10px;
-    height: 50px;
-}
-
-main {
-    margin-left: 3%;
-}
-
-.title {
-    text-align: center;
-}
-
-img {
-    max-width: 100%;
-    height: auto;
-    vertical-align: middle;
-    border: 0;
-}
-
-.arizona-line-logo {
-    width: 30%;
-    height: 80%;
-    margin-left: 2%;
+  font-family: MiloWeb, Verdana, Geneva, sans-serif;
 }
 
 /*
  * Sidebar
  */
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  /* Behind the navbar */
+  padding: 48px 0 0;
+  /* Height of navbar */
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
 
- .sidebar {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 100; /* Behind the navbar */
-    padding: 48px 0 0; /* Height of navbar */
-    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-  }
-  
+.sidebar-sticky {
+  position: relative;
+  top: 0;
+  height: calc(100vh - 48px);
+  padding-top: .5rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* Scrollable contents if viewport is shorter than content. */
+}
+
+@supports ((position: -webkit-sticky) or (position: sticky)) {
   .sidebar-sticky {
-    position: relative;
-    top: 0;
-    height: calc(100vh - 48px);
-    padding-top: .5rem;
-    overflow-x: hidden;
-    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    position: -webkit-sticky;
+    position: sticky;
   }
-  
-  @supports ((position: -webkit-sticky) or (position: sticky)) {
-    .sidebar-sticky {
-      position: -webkit-sticky;
-      position: sticky;
-    }
-  }
-  
-  .sidebar .nav-link {
-    font-weight: 500;
-    color: #333;
-  }
-  
-  .sidebar .nav-link .feather {
-    margin-right: 4px;
-    color: #999;
-  }
-  
-  .sidebar .nav-link.active {
-    color: #007bff;
-  }
-  
-  .sidebar .nav-link:hover .feather,
-  .sidebar .nav-link.active .feather {
-    color: inherit;
-  }
-  
-  .sidebar-heading {
-    font-size: .75rem;
-    text-transform: uppercase;
-  }
+}
 
-/* input {
-    background-color: #969292;
-    border: none;
-    color: white;
-    padding: 8x 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-} */
+.sidebar .nav-link {
+  font-weight: 500;
+  color: #333;
+}
+
+.sidebar .nav-link .feather {
+  margin-right: 4px;
+  color: #999;
+}
+
+.sidebar .nav-link.active {
+  color: #007bff;
+}
+
+.sidebar .nav-link:hover .feather,
+.sidebar .nav-link.active .feather {
+  color: inherit;
+}
+
+.sidebar-heading {
+  font-size: .75rem;
+  text-transform: uppercase;
+}
 
 input {
-    content: 'Choose File';
-    display: inline-block;
-    background: linear-gradient(top, #f9f9f9, #e3e3e3);
-    border: 1px solid #999;
-    border-radius: 3px;
-    padding: 5px 8px;
-    outline: none;
-    white-space: nowrap;
-    -webkit-user-select: none;
-    cursor: pointer;
-    text-shadow: 1px 1px #fff;
-    font-weight: 700;
-    font-size: 10pt;
+  content: 'Choose File';
+  display: inline-block;
+  background: linear-gradient(top, #f9f9f9, #e3e3e3);
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 700;
+  font-size: 10pt;
 }
 
 input:hover {
-    border-color: rgb(211, 211, 211);
-    background-color: rgb(211, 211, 211);
+  border-color: rgb(211, 211, 211);
+  background-color: rgb(211, 211, 211);
 }
 
 input:active {
-    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }

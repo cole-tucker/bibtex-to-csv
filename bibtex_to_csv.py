@@ -43,6 +43,10 @@ def upload_file():
     # years = [n for n in range(date.today().year - 100, date.today().year + 1)]
     return render_template('index.html')
 
+@app.route('/faq')
+def show_faq():
+    return render_template('faq.html')
+
 def read_file(filename):
     with open(filename) as bibtex_file:
         bib_database = bibtexparser.load(bibtex_file, parser=bibtexparser.bparser.BibTexParser(common_strings=True))
