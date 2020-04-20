@@ -1,35 +1,30 @@
-<!doctype html>
-<head>
-    <title>BibTeX Converter</title>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styles.css') }}">
-    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
-</head>
-<body>
-    <div class="header">
-        <h2>The University of Arizona</h2>
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+            <h3>BibTeX to CSV Converter</h3>
+            <h4>Upload a BibTeX file to generate a collaborator report in CSV format. This can be used for NSF or NIH Conflict of Interest reporting.</h4>
+        </div>
+        <div class="col-lg-8 col-lg-offset-2">
+            <ol>
+                <li>Upload a BibTeX file with a .bib file extension.</li>
+                <li>Select what category to sort by (Author or Year).</li>
+                <li>Generate CSV. The CSV file will automatically download to your browser.</li>
+            </ol>
+            <form method=post enctype=multipart/form-data>
+                <input type="file" id="selectedFile" style="display: none;" />
+                <input type="button" id="selectedButton" value="Choose File" onclick="document.getElementById('selectedFile').click();" />
+                <br>
+                <p>Sort By: Author
+                    <input type="radio" id="autor" name="sortby" value="Author">
+                    Year
+                    <input type="radio" id="year" name="sortby" value="Year">
+                </p>
+                <input type=submit value="Generate CSV">
+            </form>
+        </div>                      
+        </div>
     </div>
-    <h1>Upload BibTeX File</h1>
-    <form method=post enctype=multipart/form-data>
-        <input type=file name=file>
-        <br>
-        <p>Year Filter</p>
-        <select name="year1" method="GET" action="/" onchange="setYear(this.value)">
-            <option value="" selected></option>
-            {% for year in years %}
-              <option value="{{year}}">{{year}}</option>
-            {% endfor %}
-        </select>
-        <select name="year2" method="GET" action="/" id="select2">
-            <option value="" selected></option>
-            <!-- {% for year in years[1:] %}
-              <option value="{{year}}">{{year}}</option>
-            {% endfor %} -->
-        </select>
-        <input type=submit value=Upload>
-    </form>
-    <form method="GET">
-        <h1>Output</h1>
-        <textarea name="output" id="output" cols="120" rows="20">{{ output }}</textarea>
-    </form>
-</body>
-</html>
+</div>
+{% endblock %}

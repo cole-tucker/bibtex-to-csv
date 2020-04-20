@@ -5,7 +5,7 @@ from datetime import date
 from flask import Flask, flash, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = '/path/to/repo/'
+UPLOAD_FOLDER = '/Users/coletucker/dev/repos/bibtex-to-csv/'
 ALLOWED_EXTENSIONS = {'bib'}
 
 app = Flask(__name__)
@@ -31,17 +31,17 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            if request.form['year1'] != '' and request.form['year2'] != '':
-                year_input = request.form['year1'] + '-' + request.form['year2']
-            else:
-                year_input = 'n'
-            main(filename, year_input)
+            if request.form['sortby'] == 'Author':
+                sortby = 'Author'
+            elif request.form['sortby'] == 'Year':
+                sortby = 'Year'
+            main(filename, sortby)
             return redirect(url_for('upload_file',
                                     filename=filename))
     # if request.method == 'GET':
     #     return 
-    years = [n for n in range(date.today().year - 100, date.today().year + 1)]
-    return render_template('index.html', years=years)
+    # years = [n for n in range(date.today().year - 100, date.today().year + 1)]
+    return render_template('index.html')
 
 def read_file(filename):
     with open(filename) as bibtex_file:
@@ -61,37 +61,6 @@ def handle_year(years):
         return last_cen_years.append(this_cen_years)
 
     return [year_mil_cen + str(i) for i in range(year_start, year_end + 1)]
-
-def year_filter(bib_database, year):
-    new_bibs = []
-    for entry in bib_database:
-        if 'year' in entry.keys():
-            year_split = entry['year'].split('--')
-            if len(year_split) > 1:
-                if str(year) in handle_year(year_split):
-                    new_bibs.append(entry)
-            else:
-                if str(year) == entry['year']:
-                    new_bibs.append(entry)
-
-    return new_bibs
-
-def year_range_filter(bib_database, year_range):
-    new_bibs = []
-    for entry in bib_database:
-        if 'year' in entry.keys():
-            year_split = entry['year'].split('--')
-            if len(year_split) > 1:
-                year_list = handle_year(year_split)
-                for year in year_range:
-                    if str(year) in year_list:
-                        new_bibs.append(entry)
-            else:
-                for year in year_range:
-                    if str(year) in entry['year']:
-                        new_bibs.append(entry)
-
-    return new_bibs
 
 def parse_bib_database(bib_database):
     db_list = [['Name', 'Title', 'Organization', 'Year of Publication']]
@@ -142,29 +111,64 @@ def parse_author(authors):
         
     return author_list
 
-def main(filename, year_input):
+def main(filename, sortby):
     bib_database = read_file(filename)
-    year_input = year_input.split('-')
-
-    # Single year filter
-    if len(year_input) == 1 and len(year_input[0]) == 4:
-        bib_database = year_filter(bib_database, int(year_input[0]))
-    # Year range filter
-    if len(year_input) == 2:
-        if int(year_input[0]) < int(year_input[1]):
-            year_range = [i for i in range(int(year_input[0]), int(year_input[1]) + 1)]
-        else:
-            ...
-        bib_database = year_range_filter(bib_database, year_range)
 
     db_list = parse_bib_database(bib_database)
-    # Sort on author
-    db_list[1:] = sorted(db_list[1:], key=lambda row: row[0].upper(), reverse=False)
+    if sortby == "Author":
+        db_list[1:] = sorted(db_list[1:], key=lambda row: row[0].upper(), reverse=False)
+    if sortby == "Year":
+        db_list[1:] = sorted(db_list[1:], key=lambda row: row[3].upper(), reverse=False)
 
     with open("output.csv", "w", newline="") as output:
         writer = csv.writer(output)
         writer.writerows(db_list)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
 # main()
+
+# main other
+# year_input = year_input.split('-')
+
+# # Single year filter
+# if len(year_input) == 1 and len(year_input[0]) == 4:
+#     bib_database = year_filter(bib_database, int(year_input[0]))
+# # Year range filter
+# if len(year_input) == 2:
+#     if int(year_input[0]) < int(year_input[1]):
+#         year_range = [i for i in range(int(year_input[0]), int(year_input[1]) + 1)]
+#     else:
+#         ...
+#     bib_database = year_range_filter(bib_database, year_range)
+
+# def year_filter(bib_database, year):
+#     new_bibs = []
+#     for entry in bib_database:
+#         if 'year' in entry.keys():
+#             year_split = entry['year'].split('--')
+#             if len(year_split) > 1:
+#                 if str(year) in handle_year(year_split):
+#                     new_bibs.append(entry)
+#             else:
+#                 if str(year) == entry['year']:
+#                     new_bibs.append(entry)
+
+#     return new_bibs
+
+# def year_range_filter(bib_database, year_range):
+#     new_bibs = []
+#     for entry in bib_database:
+#         if 'year' in entry.keys():
+#             year_split = entry['year'].split('--')
+#             if len(year_split) > 1:
+#                 year_list = handle_year(year_split)
+#                 for year in year_range:
+#                     if str(year) in year_list:
+#                         new_bibs.append(entry)
+#             else:
+#                 for year in year_range:
+#                     if str(year) in entry['year']:
+#                         new_bibs.append(entry)
+
+#     return new_bibs
