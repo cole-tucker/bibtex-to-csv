@@ -10,3 +10,10 @@ function setYear(val) {
         sel.add(opt);
     }
 }
+
+$(".nav a").on("click", function(){
+    $(".nav").find(".active").removeClass("active");
+    $(this).parent().addClass("active");
+});
+
+$('.toast').toast('show')

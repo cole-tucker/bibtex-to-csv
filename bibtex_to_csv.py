@@ -2,13 +2,14 @@ import os
 import bibtexparser
 import csv
 from datetime import date
-from flask import Flask, flash, request, redirect, url_for, render_template
+from flask import Flask, flash, request, redirect, url_for, render_template, session
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = '/Users/coletucker/dev/repos/bibtex-to-csv/'
+UPLOAD_FOLDER = '/path/to/your/folder'
 ALLOWED_EXTENSIONS = {'bib'}
 
 app = Flask(__name__)
+app.secret_key = 'super secret key'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
@@ -33,14 +34,12 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             if request.form['sortby'] == 'Author':
                 sortby = 'Author'
-            elif request.form['sortby'] == 'Year':
+            else:
                 sortby = 'Year'
-            main(filename, sortby)
+            run_app(filename, sortby)
             return redirect(url_for('upload_file',
                                     filename=filename))
-    # if request.method == 'GET':
-    #     return 
-    # years = [n for n in range(date.today().year - 100, date.today().year + 1)]
+
     return render_template('index.html')
 
 @app.route('/faq')
@@ -115,7 +114,10 @@ def parse_author(authors):
         
     return author_list
 
-def main(filename, sortby):
+def download_file():
+    ...
+
+def run_app(filename, sortby):
     bib_database = read_file(filename)
 
     db_list = parse_bib_database(bib_database)
@@ -130,7 +132,6 @@ def main(filename, sortby):
 
 if __name__ == '__main__':
     app.run(debug=True)
-# main()
 
 # main other
 # year_input = year_input.split('-')

@@ -88,3 +88,8 @@ input:hover {
 input:active {
   background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }
+
+.toast {
+  background-color: green;
+  color: white;
+}
