@@ -28,7 +28,7 @@ pip install -r requirements.txt
 ```
 
 6. Open bibtex_to_csv.py and change the `UPLOAD_FOLDER` to your project directory.
-7. Finally, run `export FLASK_APP=bibtex_to_csv` whenever you start your environment and `flask run` to start your server.
+7. Finally, run `python3 ./bibtex_to_csv.py`
 
 Go to localhost:[Port Specified in Command Line] in desired browser.
 You will now have a local server up and running. In bibtex_to_csv.py, change the UPLOAD_FOLDER variable to desired path. To refresh the server after a code change, run `flask run` again.
