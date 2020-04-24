@@ -23,12 +23,12 @@
                             Data Science Institute
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="/">
+                            <a {% if request.endpoint == 'upload_file' %}class="nav-link active" {% else %}class="nav-link"{% endif %} href="{{url_for('upload_file') }}">
                                 BibTeX to CSV Converter
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/faq">
+                            <a {% if request.endpoint == 'show_faq' %}class="nav-link active" {% else %}class="nav-link"{% endif %} href="{{ url_for('show_faq') }}">
                                 FAQ
                             </a>
                         </li>
