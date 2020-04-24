@@ -5,7 +5,7 @@ from datetime import date
 from flask import Flask, flash, request, redirect, url_for, render_template, session
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = '/path/to/your/folder'
+UPLOAD_FOLDER = '/Users/coletucker/Downloads'
 ALLOWED_EXTENSIONS = {'bib'}
 
 app = Flask(__name__)
@@ -19,16 +19,15 @@ def allowed_file(filename):
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-        # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
             return redirect(request.url)
         file = request.files['file']
-        # if user does not select file, browser also
-        # submit an empty part without filename
+        
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
+
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -36,7 +35,9 @@ def upload_file():
                 sortby = 'Author'
             else:
                 sortby = 'Year'
+
             run_app(filename, sortby)
+
             return redirect(url_for('upload_file',
                                     filename=filename))
 
@@ -88,21 +89,10 @@ def parse_bib_database(bib_database):
             for author in authors:
                 author = author.strip()
                 if author != 'others,':
-                    single_entry = []
-                    single_entry.append(author)
-                    single_entry.append(entry['title'])
-                    single_entry.append(organization)
-                    single_entry.append(year)
-                    db_list.append(single_entry)
-
+                    db_list.append([authors, entry['title'], organization, year])
         else:
-            authors = ''
-            single_entry = []
-            single_entry.append(authors)
-            single_entry.append(entry['title'])
-            single_entry.append(organization)
-            single_entry.append(year)
-            db_list.append(single_entry)
+            db_list.append([authors, entry['title'], organization, year])
+
     return db_list
 
 def parse_author(authors):
@@ -119,13 +109,14 @@ def download_file():
 
 def run_app(filename, sortby):
     bib_database = read_file(filename)
-
     db_list = parse_bib_database(bib_database)
+
     if sortby == "Author":
         db_list[1:] = sorted(db_list[1:], key=lambda row: row[0].upper(), reverse=False)
     if sortby == "Year":
         db_list[1:] = sorted(db_list[1:], key=lambda row: row[3].upper(), reverse=False)
 
+    #Change to download functionality
     with open("output.csv", "w", newline="") as output:
         writer = csv.writer(output)
         writer.writerows(db_list)
