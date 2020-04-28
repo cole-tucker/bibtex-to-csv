@@ -16,11 +16,11 @@
                 <input type="file" id="selectedFile" style="display: none;" />
                 <input type="button" id="selectedButton" value="Choose File" onclick="document.getElementById('selectedFile').click();" />
                 <p style="margin-top: 1em;">Sort By: Author
-                    <input type="radio" id="author" name="author" value="Author">
+                    <input type="radio" id="author" name="filter" value="Author">
                     Year
-                    <input type="radio" id="year" name="year" value="Year">
+                    <input type="radio" id="year" name="filter" value="Year">
                 </p>
-                <input type=submit value="Generate CSV">
+                <input type=submit id="submit" value="Generate CSV" disabled="true">
             </form>
         </div>
         <div class="toast" data-autohide="false" style="position: absolute; top: 0; right: 0;">

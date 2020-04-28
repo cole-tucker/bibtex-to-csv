@@ -16,4 +16,16 @@ $(".nav a").on("click", function(){
     $(this).parent().addClass("active");
 });
 
+$('#selectedFile').on('change', function() {
+    if ($(':radio').is(':checked')) {
+        $('#submit').prop("disabled", false);
+    }
+})
+
+$(':radio').on('change', function() {
+    if (document.getElementById("selectedFile").value != '') {
+        $('#submit').prop("disabled", false);
+    }
+})
+
 $('.toast').toast('show')

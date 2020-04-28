@@ -4,6 +4,14 @@ body {
   padding: 0 !important;
 }
 
+header {
+  max-height: 59px;
+  background-color: #ab0520;
+  color: #ffffff;
+  position: absolute;
+  display: block;
+}
+
 body {
   font-family: MiloWeb, Verdana, Geneva, sans-serif;
 }
@@ -12,10 +20,9 @@ body {
  * Sidebar
  */
 .sidebar {
-  position: fixed;
   top: 0;
   bottom: 0;
-  left: 0;
+  left: 5px;
   z-index: 100;
   /* Behind the navbar */
   padding: 48px 0 0;
@@ -87,6 +94,10 @@ input:hover {
 
 input:active {
   background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+
+#submit:disabled {
+  cursor: not-allowed;
 }
 
 .toast {
