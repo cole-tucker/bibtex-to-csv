@@ -3,23 +3,21 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
-            <h3>BibTeX to CSV Converter</h3>
-            <h5>Upload a BibTeX file to generate a collaborator report in CSV format. This can be used for NSF or NIH Conflict of Interest reporting.</h4>
+            <h3 class="center">Create NSF Conflict of Interest Report</h3>
+            <h5>Upload a BibTeX file to generate a collaborator report in CSV format.</h5>
         </div>
         <div class="col-lg-8 col-lg-offset-2">
-            <ol>
-                <li>Upload a BibTeX file with a .bib file extension.</li>
-                <li>Select what category to sort by (Author or Year).</li>
-                <li>Generate CSV. The CSV file will automatically download to your browser.</li>
-            </ol>
             <form method=post enctype=multipart/form-data>
-                <input type="file" id="selectedFile" style="display: none;" />
-                <input type="button" id="selectedButton" value="Choose File" onclick="document.getElementById('selectedFile').click();" />
+                <p>Upload a BibTeX file with a .bib file extension.</p>
+                <input type="file" id="selectedFile" />
+                <!-- <input type="button" id="selectedButton" value="Choose File" onclick="document.getElementById('selectedFile').click();" /> -->
+                <p>Select what category to sort by (Author or Year).</p>
                 <p style="margin-top: 1em;">Sort By: Author
                     <input type="radio" id="author" name="filter" value="Author">
                     Year
                     <input type="radio" id="year" name="filter" value="Year">
                 </p>
+                <p>Generate CSV. The CSV file will automatically download to your browser.</p>
                 <input type=submit id="submit" value="Generate CSV" disabled="true">
             </form>
         </div>

@@ -72,7 +72,6 @@ body {
 }
 
 input {
-  content: 'Choose File';
   display: inline-block;
   background: linear-gradient(top, #f9f9f9, #e3e3e3);
   border: 1px solid #999;
@@ -94,6 +93,12 @@ input:hover {
 
 input:active {
   background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+
+input[type=file] {
+  border: none;
+  padding: 5px;
+  margin-bottom: 5px;
 }
 
 #submit:disabled {
